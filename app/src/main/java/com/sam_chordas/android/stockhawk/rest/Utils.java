@@ -30,13 +30,19 @@ public class Utils {
         if (count == 1){
           jsonObject = jsonObject.getJSONObject("results")
               .getJSONObject("quote");
-          batchOperations.add(buildBatchOperation(jsonObject));
+          ContentProviderOperation providerOperation = buildBatchOperation(jsonObject);
+
+            if(providerOperation!=null)
+           {
+            batchOperations.add(providerOperation);
+          }
         } else{
           resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");
 
           if (resultsArray != null && resultsArray.length() != 0){
             for (int i = 0; i < resultsArray.length(); i++){
               jsonObject = resultsArray.getJSONObject(i);
+
               batchOperations.add(buildBatchOperation(jsonObject));
             }
           }
@@ -49,7 +55,9 @@ public class Utils {
   }
 
   public static String truncateBidPrice(String bidPrice){
-    bidPrice = String.format("%.2f", Float.parseFloat(bidPrice));
+
+      bidPrice = String.format("%.2f", Float.parseFloat(bidPrice));
+
     return bidPrice;
   }
 
@@ -70,26 +78,42 @@ public class Utils {
     return change;
   }
 
-  public static ContentProviderOperation buildBatchOperation(JSONObject jsonObject){
-    ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(
-        QuoteProvider.Quotes.CONTENT_URI);
-    try {
-      String change = jsonObject.getString("Change");
-      builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString("symbol"));
-      builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString("Bid")));
-      builder.withValue(QuoteColumns.PERCENT_CHANGE, truncateChange(
-          jsonObject.getString("ChangeinPercent"), true));
-      builder.withValue(QuoteColumns.CHANGE, truncateChange(change, false));
-      builder.withValue(QuoteColumns.ISCURRENT, 1);
-      if (change.charAt(0) == '-'){
-        builder.withValue(QuoteColumns.ISUP, 0);
-      }else{
-        builder.withValue(QuoteColumns.ISUP, 1);
-      }
+  public static ContentProviderOperation buildBatchOperation(JSONObject jsonObject) {
+      ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(
+              QuoteProvider.Quotes.CONTENT_URI);
 
-    } catch (JSONException e){
-      e.printStackTrace();
-    }
-    return builder.build();
+      String changes = null;
+      try {
+          changes = jsonObject.getString("Change");
+      } catch (JSONException e) {
+          e.printStackTrace();
+      }
+      Log.d("values", changes);
+
+      if (changes != null && changes != "null") {
+
+
+          try {
+
+              String change = jsonObject.getString("Change");
+              builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString("symbol"));
+              builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString("Bid")));
+              builder.withValue(QuoteColumns.PERCENT_CHANGE, truncateChange(
+                      jsonObject.getString("ChangeinPercent"), true));
+              builder.withValue(QuoteColumns.CHANGE, truncateChange(change, false));
+              builder.withValue(QuoteColumns.ISCURRENT, 1);
+              if (change.charAt(0) == '-') {
+                  builder.withValue(QuoteColumns.ISUP, 0);
+              } else {
+                  builder.withValue(QuoteColumns.ISUP, 1);
+              }
+
+          } catch (JSONException e) {
+              e.printStackTrace();
+          }
+          return builder.build();
+      }
+      return null;
   }
+
 }
