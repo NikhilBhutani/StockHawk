@@ -1,9 +1,11 @@
 package com.sam_chordas.android.stockhawk.ui.Graph;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.sam_chordas.android.stockhawk.Constants;
@@ -15,7 +17,7 @@ import com.sam_chordas.android.stockhawk.service.StockIntentService;
  */
 public class GraphActivity extends AppCompatActivity {
 
-    private Intent serviceIntent;
+    private final String LOG_TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,11 +27,14 @@ public class GraphActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getIntent().getStringExtra(Constants.SYMBOL_NAME_KEY));
 
 
-        serviceIntent = new Intent(this, StockIntentService.class);
+        Intent serviceIntent = new Intent(this, StockIntentService.class);
 
         serviceIntent.putExtra("tag", "historical_data");
-        serviceIntent.putExtra(Constants.SYMBOL_NAME_KEY, getIntent().getStringExtra(Constants.SYMBOL_NAME_KEY));
+        serviceIntent.putExtra("symbol_name", getIntent().getStringExtra(Constants.SYMBOL_NAME_KEY));
 
+
+
+         startService(serviceIntent);
 
 
 
