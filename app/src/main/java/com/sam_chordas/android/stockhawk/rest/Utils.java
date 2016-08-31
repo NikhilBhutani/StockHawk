@@ -92,7 +92,7 @@ public class Utils {
 
       if (changes != null && changes != "null") {
 
-
+           Log.d(LOG_TAG, "CHANGES HERE");
           try {
 
               String change = jsonObject.getString("Change");

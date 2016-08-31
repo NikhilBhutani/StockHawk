@@ -45,7 +45,7 @@ public class StockIntentService extends IntentService {
        handler.post(new Runnable() {
          @Override
          public void run() {
-           Toast.makeText(getApplicationContext(), "Ops! Symbol Not Found!", Toast.LENGTH_SHORT).show();
+           Snackbar.make(MyStocksActivity.view, "Ops! Symbol Not Found!", Snackbar.LENGTH_LONG).show();
          }
        });
    }
@@ -54,7 +54,7 @@ public class StockIntentService extends IntentService {
      handler.post(new Runnable() {
        @Override
        public void run() {
-           Toast.makeText(getApplicationContext(), "New Symbol Found & Added!", Toast.LENGTH_SHORT).show();
+           Snackbar.make(MyStocksActivity.view, "New Symbol Found & Added!", Snackbar.LENGTH_LONG).show();
        }
      });
    }

@@ -131,16 +131,14 @@ public class StockTaskService extends GcmTaskService {
                         mContext.getContentResolver().update(QuoteProvider.Quotes.CONTENT_URI, contentValues,
                                 null, null);
                     }
+
+
                     ArrayList<ContentProviderOperation> providerOperations = Utils.quoteJsonToContentVals(getResponse);
                     if (providerOperations.size() > 0) {
-
+                        Log.d(LOG_TAG, "Entered Here " + providerOperations);
                         mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
                                 providerOperations);
-
-
                     } else {
-
-
                         result = GcmNetworkManager.RESULT_FAILURE;
                     }
                 } catch (RemoteException | OperationApplicationException e) {

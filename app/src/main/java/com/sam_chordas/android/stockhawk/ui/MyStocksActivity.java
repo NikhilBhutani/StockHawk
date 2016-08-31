@@ -58,7 +58,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private Context mContext;
     private Cursor mCursor;
     boolean isConnected;
-    public View view;
+    public static View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,7 +183,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     }
 
     public void networkToast() {
-        Snackbar.make(view, "Oh! Check your Internet Connection", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(view, "No Internet!, Check your Internet Connection", Snackbar.LENGTH_LONG).show();
     }
 
     public void restoreActionBar() {
