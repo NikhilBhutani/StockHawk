@@ -24,7 +24,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
         this.intent = intent;
     }
 
-    private void initCursor(){
+    private void initCursor() {
         if (cursor != null) {
             cursor.close();
         }
@@ -33,7 +33,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
                 new String[]{QuoteColumns._ID, QuoteColumns.SYMBOL, QuoteColumns.BIDPRICE,
                         QuoteColumns.PERCENT_CHANGE, QuoteColumns.CHANGE, QuoteColumns.ISUP},
                 QuoteColumns.ISCURRENT + " = ?",
-                new String[]{"1"},null);
+                new String[]{"1"}, null);
         Binder.restoreCallingIdentity(identityToken);
     }
 
@@ -64,9 +64,9 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     public RemoteViews getViewAt(int i) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.list_item_quote);
         cursor.moveToPosition(i);
-        remoteViews.setTextViewText(R.id.stock_symbol,cursor.getString(cursor.getColumnIndex(QuoteColumns.SYMBOL)));
-        remoteViews.setTextViewText(R.id.bid_price,cursor.getString(cursor.getColumnIndex(QuoteColumns.BIDPRICE)));
-        remoteViews.setTextViewText(R.id.change,cursor.getString(cursor.getColumnIndex(QuoteColumns.CHANGE)));
+        remoteViews.setTextViewText(R.id.stock_symbol, cursor.getString(cursor.getColumnIndex(QuoteColumns.SYMBOL)));
+        remoteViews.setTextViewText(R.id.bid_price, cursor.getString(cursor.getColumnIndex(QuoteColumns.BIDPRICE)));
+        remoteViews.setTextViewText(R.id.change, cursor.getString(cursor.getColumnIndex(QuoteColumns.CHANGE)));
         if (cursor.getString(cursor.getColumnIndex(QuoteColumns.ISUP)).equals("1")) {
             remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_green);
         } else {

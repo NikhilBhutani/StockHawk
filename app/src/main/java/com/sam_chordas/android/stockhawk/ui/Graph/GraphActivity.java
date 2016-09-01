@@ -35,6 +35,7 @@ public class GraphActivity extends AppCompatActivity {
     private View mview;
     private String item;
     public static String symbol;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +47,11 @@ public class GraphActivity extends AppCompatActivity {
 
         symbol = getIntent().getStringExtra(Constants.SYMBOL_NAME_KEY);
         getSupportActionBar().setTitle(symbol);
-        Intent stockIntent = new Intent(this,StockIntentService.class);
-        stockIntent.putExtra("tag","historical");
-        stockIntent.putExtra("name",getIntent().getStringExtra("name"));
-        stockIntent.putExtra("currdate",getIntent().getStringExtra("currdate"));
-        stockIntent.putExtra("weekbef",getIntent().getStringExtra("weekbef"));
+        Intent stockIntent = new Intent(this, StockIntentService.class);
+        stockIntent.putExtra("tag", "historical");
+        stockIntent.putExtra("name", getIntent().getStringExtra("name"));
+        stockIntent.putExtra("currdate", getIntent().getStringExtra("currdate"));
+        stockIntent.putExtra("weekbef", getIntent().getStringExtra("weekbef"));
         startService(stockIntent);
         Cursor c = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
                 null,
@@ -138,7 +139,6 @@ public class GraphActivity extends AppCompatActivity {
 
         c.close();
     }
-
 
 
 }

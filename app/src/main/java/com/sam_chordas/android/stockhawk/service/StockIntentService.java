@@ -53,7 +53,7 @@ public class StockIntentService extends IntentService {
             }
         }
 
-        if(intent.getStringExtra("tag").equals("init")){
+        if (intent.getStringExtra("tag").equals("init")) {
             stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
         }
 

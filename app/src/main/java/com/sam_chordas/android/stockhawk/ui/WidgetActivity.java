@@ -16,14 +16,14 @@ import com.sam_chordas.android.stockhawk.service.WidgetService;
 /**
  * Created by Nikhil Bhutani on 9/2/2016.
  */
-public class WidgetActivity extends AppWidgetProvider{
+public class WidgetActivity extends AppWidgetProvider {
 
     private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                         int appWidgetId) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.stock_widget);
         // Instruct the widget manager to update the widget
-            setRemoteAdapterV11(context, views);
+        setRemoteAdapterV11(context, views);
 
         Intent launchMain = new Intent(context, MyStocksActivity.class);
 //        Intent launchDetail = new Intent(context, StockDetailActivity.class);
@@ -33,7 +33,7 @@ public class WidgetActivity extends AppWidgetProvider{
 //                .getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.widget_toolbar, pendingMainIntent);
 //        views.setOnClickPendingIntent(R.id.widget_listView,pendingDetailIntent);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.widget_listView);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_listView);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 

@@ -11,6 +11,6 @@ import com.sam_chordas.android.stockhawk.data.WidgetDataProvider;
 public class WidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new WidgetDataProvider(this,intent);
+        return new WidgetDataProvider(this, intent);
     }
 }

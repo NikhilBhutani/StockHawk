@@ -37,6 +37,7 @@ public class StockTaskService extends GcmTaskService {
     private StringBuilder mStoredSymbols = new StringBuilder();
     private boolean isUpdate;
     String tag;
+
     public StockTaskService() {
     }
 
@@ -71,7 +72,7 @@ public class StockTaskService extends GcmTaskService {
         }
         */
         if (params.getTag().equals("init") || params.getTag().equals("periodic")) {
-               tag = params.getTag();
+            tag = params.getTag();
             try {
                 // Base URL for the Yahoo query
                 urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
@@ -109,7 +110,7 @@ public class StockTaskService extends GcmTaskService {
                 }
             }
         } else if (params.getTag().equals("add")) {
-                  tag = params.getTag();
+            tag = params.getTag();
             try {
                 // Base URL for the Yahoo query
                 urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
@@ -130,19 +131,13 @@ public class StockTaskService extends GcmTaskService {
             }
         }
 
-        if(params.getTag().equals("historical_data")) {
-
-            Log.i(LOG_TAG, "In Historical Data service snippet for "+params.getExtras().getString("name"));
-            Log.i(LOG_TAG, "In Historical Data service snippet for "+params.getExtras().getString("startdate"));
-            Log.i(LOG_TAG, "In Historical Data service snippet for "+params.getExtras().getString("currentdate"));
-
-
+        if (params.getTag().equals("historical_data")) {
 
             urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22" +
                     params.getExtras().getString("name") + "%22%20and%20startDate%20%3D%20%22" +
                     params.getExtras().getString("startdate") + "%22%20and%20endDate%20%3D%20%22" +
                     params.getExtras().getString("currentdate") + "%22");
-                 tag = params.getTag();
+            tag = params.getTag();
 
 
         }
@@ -162,7 +157,7 @@ public class StockTaskService extends GcmTaskService {
                 Log.i(LOG_TAG, "Response" + getResponse);
                 result = GcmNetworkManager.RESULT_SUCCESS;
 
-                if (tag.equals("init")||tag.equals("add")||tag.equals("periodic")) {
+                if (tag.equals("init") || tag.equals("add") || tag.equals("periodic")) {
                     try {
                         ContentValues contentValues = new ContentValues();
                         // update ISCURRENT to 0 (false) so new data is current
@@ -186,8 +181,7 @@ public class StockTaskService extends GcmTaskService {
                     } catch (RemoteException | OperationApplicationException e) {
                         Log.e(LOG_TAG, "Error applying batch insert", e);
                     }
-                }
-                else{
+                } else {
                     Log.i(LOG_TAG, "Getting Historical Data");
                 }
             } catch (IOException e) {
