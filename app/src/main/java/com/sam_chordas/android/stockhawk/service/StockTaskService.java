@@ -12,7 +12,6 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.TaskParams;
-import com.sam_chordas.android.stockhawk.Constants;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.Utils;
@@ -37,7 +36,7 @@ public class StockTaskService extends GcmTaskService {
     private Context mContext;
     private StringBuilder mStoredSymbols = new StringBuilder();
     private boolean isUpdate;
-
+    String tag;
     public StockTaskService() {
     }
 
@@ -62,7 +61,7 @@ public class StockTaskService extends GcmTaskService {
             mContext = this;
         }
         StringBuilder urlStringBuilder = new StringBuilder();
-        try {
+    /*    try {
             // Base URL for the Yahoo query
             urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
             urlStringBuilder.append(URLEncoder.encode("select * from yahoo.finance.quotes where symbol "
@@ -70,7 +69,18 @@ public class StockTaskService extends GcmTaskService {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        */
         if (params.getTag().equals("init") || params.getTag().equals("periodic")) {
+               tag = params.getTag();
+            try {
+                // Base URL for the Yahoo query
+                urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
+                urlStringBuilder.append(URLEncoder.encode("select * from yahoo.finance.quotes where symbol "
+                        + "in (", "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
             isUpdate = true;
             initQueryCursor = mContext.getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
                     new String[]{"Distinct " + QuoteColumns.SYMBOL}, null,
@@ -99,6 +109,17 @@ public class StockTaskService extends GcmTaskService {
                 }
             }
         } else if (params.getTag().equals("add")) {
+                  tag = params.getTag();
+            try {
+                // Base URL for the Yahoo query
+                urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
+                urlStringBuilder.append(URLEncoder.encode("select * from yahoo.finance.quotes where symbol "
+                        + "in (", "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+
             isUpdate = false;
             // get symbol from params.getExtra and build query
             String stockInput = params.getExtras().getString("symbol");
@@ -112,6 +133,17 @@ public class StockTaskService extends GcmTaskService {
         if(params.getTag().equals("historical_data")) {
 
             Log.i(LOG_TAG, "In Historical Data service snippet for "+params.getExtras().getString("name"));
+            Log.i(LOG_TAG, "In Historical Data service snippet for "+params.getExtras().getString("startdate"));
+            Log.i(LOG_TAG, "In Historical Data service snippet for "+params.getExtras().getString("currentdate"));
+
+
+
+            urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22" +
+                    params.getExtras().getString("name") + "%22%20and%20startDate%20%3D%20%22" +
+                    params.getExtras().getString("startdate") + "%22%20and%20endDate%20%3D%20%22" +
+                    params.getExtras().getString("currentdate") + "%22");
+                 tag = params.getTag();
+
 
         }
         // finalize the URL for the API query.
@@ -129,27 +161,34 @@ public class StockTaskService extends GcmTaskService {
                 getResponse = fetchData(urlString);
                 Log.i(LOG_TAG, "Response" + getResponse);
                 result = GcmNetworkManager.RESULT_SUCCESS;
-                try {
-                    ContentValues contentValues = new ContentValues();
-                    // update ISCURRENT to 0 (false) so new data is current
-                    if (isUpdate) {
-                        contentValues.put(QuoteColumns.ISCURRENT, 0);
 
-                        mContext.getContentResolver().update(QuoteProvider.Quotes.CONTENT_URI, contentValues,
-                                null, null);
+                if (tag.equals("init")||tag.equals("add")||tag.equals("periodic")) {
+                    try {
+                        ContentValues contentValues = new ContentValues();
+                        // update ISCURRENT to 0 (false) so new data is current
+
+                        if (isUpdate) {
+                            contentValues.put(QuoteColumns.ISCURRENT, 0);
+
+                            mContext.getContentResolver().update(QuoteProvider.Quotes.CONTENT_URI, contentValues,
+                                    null, null);
+                        }
+
+
+                        ArrayList<ContentProviderOperation> providerOperations = Utils.quoteJsonToContentVals(getResponse);
+                        if (providerOperations.size() > 0) {
+                            Log.d(LOG_TAG, "Entered Here " + providerOperations);
+                            mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
+                                    providerOperations);
+                        } else {
+                            result = GcmNetworkManager.RESULT_FAILURE;
+                        }
+                    } catch (RemoteException | OperationApplicationException e) {
+                        Log.e(LOG_TAG, "Error applying batch insert", e);
                     }
-
-
-                    ArrayList<ContentProviderOperation> providerOperations = Utils.quoteJsonToContentVals(getResponse);
-                    if (providerOperations.size() > 0) {
-                        Log.d(LOG_TAG, "Entered Here " + providerOperations);
-                        mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
-                                providerOperations);
-                    } else {
-                        result = GcmNetworkManager.RESULT_FAILURE;
-                    }
-                } catch (RemoteException | OperationApplicationException e) {
-                    Log.e(LOG_TAG, "Error applying batch insert", e);
+                }
+                else{
+                    Log.i(LOG_TAG, "Getting Historical Data");
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.ViewParent;
-import android.widget.Toast;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.TaskParams;
-import com.sam_chordas.android.stockhawk.Constants;
+import com.sam_chordas.android.stockhawk.Utility.Constants;
 import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 
 /**
@@ -63,6 +61,8 @@ public class StockIntentService extends IntentService {
 
             Log.i("Here Im ", "Starting the graph service");
             args.putString("name", intent.getStringExtra("symbol_name"));
+            args.putString("startdate", intent.getStringExtra(Constants.START_DATE_KEY));
+            args.putString("currentdate", intent.getStringExtra(Constants.CURRENT_DATE_KEY));
 
             stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
 

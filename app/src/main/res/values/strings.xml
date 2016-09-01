@@ -10,4 +10,11 @@
   <string name="input_hint">FB</string>
   <string name="input_prefill"></string>
   <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+
+  <string name="annual_minimum">Annual Minimum</string>
+  <string name="annual_max">Annual Maximum</string>
+
+  <string name="minimum_price">Today\'s Minimum</string>
+  <string name="maximum_price">Today\'s Maximum</string>
+  <string name="current_price">Last Trade Price</string>
 </resources>

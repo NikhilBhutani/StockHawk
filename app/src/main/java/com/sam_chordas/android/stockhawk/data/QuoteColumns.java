@@ -33,4 +33,20 @@ public class QuoteColumns {
     @DataType(DataType.Type.INTEGER)
     @NotNull
     public static final String ISCURRENT = "is_current";
+
+    @DataType(DataType.Type.TEXT)
+    public static final String DAYSHIGH = "days_high";
+    @DataType(DataType.Type.TEXT)
+    public static final String DAYSLOW = "days_low";
+    @DataType(DataType.Type.TEXT)
+    public static final String YEARLOW = "year_low";
+    @DataType(DataType.Type.TEXT)
+    public static final String YEARHIGH = "year_high";
+    @DataType(DataType.Type.TEXT)
+    public static final String LASTTRADE = "last_trade";
+    @DataType(DataType.Type.TEXT)
+    public static final String NAME = "name";
+    @DataType(DataType.Type.TEXT)
+    public static final String TODAYRANGE = "today_range";
+
 }
