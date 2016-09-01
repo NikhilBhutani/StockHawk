@@ -11,6 +11,7 @@
         android:layout_height="match_parent" />
 
     <com.melnykov.fab.FloatingActionButton
+        android:contentDescription="@string/add_a_new_stock"
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

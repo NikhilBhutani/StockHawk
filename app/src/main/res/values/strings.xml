@@ -17,4 +17,8 @@
   <string name="minimum_price">Today\'s Minimum</string>
   <string name="maximum_price">Today\'s Maximum</string>
   <string name="current_price">Last Trade Price</string>
+  <string name="your_stocks">Your Stocks</string>
+  <string name="stock_widget">Stock Widget</string>
+   <string name="add_a_new_stock">Add New Stock</string>
+
 </resources>
