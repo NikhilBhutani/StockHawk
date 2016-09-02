@@ -23,6 +23,7 @@
 
   <string name = "stock_already_saved">This stock is already saved!</string>
   <string name = "no_internet_connection">No Internet!, Check your Internet Connection</string>
-
+  <string name="symbol_not_found">Ops! Symbol Not Found!</string>
+    <string name="symbol_found">New Symbol Found And Added!</string>
 
 </resources>

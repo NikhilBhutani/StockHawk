@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.TaskParams;
+import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.Utility.Constants;
 import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 
@@ -40,14 +41,14 @@ public class StockIntentService extends IntentService {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Snackbar.make(MyStocksActivity.view, "Ops! Symbol Not Found!", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(MyStocksActivity.view, R.string.symbol_not_found, Snackbar.LENGTH_LONG).show();
                     }
                 });
             } else {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Snackbar.make(MyStocksActivity.view, "New Symbol Found & Added!", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(MyStocksActivity.view, R.string.symbol_found, Snackbar.LENGTH_LONG).show();
                     }
                 });
             }
