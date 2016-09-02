@@ -21,4 +21,8 @@
   <string name="stock_widget">Stock Widget</string>
    <string name="add_a_new_stock">Add New Stock</string>
 
+  <string name = "stock_already_saved">This stock is already saved!</string>
+  <string name = "no_internet_connection">No Internet!, Check your Internet Connection</string>
+
+
 </resources>
